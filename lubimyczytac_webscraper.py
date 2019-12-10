@@ -11,6 +11,7 @@ class WebScraper:
 	def __init__(self, path):
 		self.__source_page = path
 		self.__storage_dir = 'lubimyczytac_recenzje'
+		self.__counter = 0
 
 
 	def createFilename(self, filename):
@@ -53,6 +54,7 @@ class WebScraper:
 			with open(filename, 'w+', encoding='utf-8') as file:
 				file.write(t)
 			file.close()
+			self.__counter += 1
 
 
 	def crawling(self):
@@ -60,7 +62,7 @@ class WebScraper:
 		page = self.__source_page
 		it = 0
 
-		for i in range(98, 119):
+		for i in range(1, 119):
 			if i == 1:
 				page = self.__source_page
 			else:
@@ -76,6 +78,8 @@ class WebScraper:
 			soup = BeautifulSoup(data.read(), "html.parser")
 
 			for link in soup.findAll('a', {'class' : 'authorAllBooks__singleTextTitle float-left'}):
+				if self.__counter > 10000:
+					break
 				url = urljoin(page, link['href'])
 				url = url.split('#')[0]
 				self.scraping(url)
