@@ -26,23 +26,28 @@ def prepareSets(name):
 
 
 def linearRegression(name):
-	regressor = LinearRegression()
+	regressor = LinearRegression(fit_intercept=True, normalize=False)
 	X_train, y_train, X_test, y_test = prepareSets(name)
 	regressor.fit(X_train, y_train)
 
 	y_pred = regressor.predict(X_test)
 	df = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred}).round({'Predicted' : 0})
-	print(df.head(100))
+	print(df.head(40))
 	print(f'RMSE: {metrics.mean_squared_error(y_test, y_pred, squared=False)}')
-	print(f'accuracy score: {round(regressor.score(X_test, y_test) * 100, 0)}%')#, 9)}%') #
+	#print(f'accuracy score: {round(regressor.score(X_test, y_test) * 100, 0)}')
 
 
 if __name__ == '__main__':
+	
 	if not os.path.exists('lubimyczytac_recenzje'):
 		WS = lcw.WebScraper('https://lubimyczytac.pl/katalog')
 		WS.crawling()
-	Data = dm.Data()
-	Data.readFiles('./lubimyczytac_recenzje/')
-	Data.tfidf()
-	#linearRegression('train')
-	#linearRegression('dev')
+	if not os.path.exists('./train.csv') or not os.path.exists('./test.csv') or not os.path.exists('./validate.csv'):
+		Data = dm.Data()
+		Data.readFiles('./lubimyczytac_recenzje/')
+		Data.tfidf()
+
+	print(f'============train============')
+	linearRegression('train')
+	print(f'\n=============dev=============')
+	linearRegression('dev')
