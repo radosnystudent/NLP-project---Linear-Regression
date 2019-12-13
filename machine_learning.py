@@ -26,7 +26,7 @@ def prepareSets(name):
 
 
 def linearRegression(name):
-	regressor = LinearRegression(fit_intercept=True, normalize=False)
+	regressor = LinearRegression()#fit_intercept=True, normalize=False)
 	X_train, y_train, X_test, y_test = prepareSets(name)
 	regressor.fit(X_train, y_train)
 
@@ -34,7 +34,7 @@ def linearRegression(name):
 	df = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred}).round({'Predicted' : 0})
 	print(df.head(40))
 	print(f'RMSE: {metrics.mean_squared_error(y_test, y_pred, squared=False)}')
-	#print(f'accuracy score: {round(regressor.score(X_test, y_test) * 100, 0)}')
+	print(f'accuracy score: {round(regressor.score(X_test, y_test) * 100, 0)}%')
 
 
 if __name__ == '__main__':

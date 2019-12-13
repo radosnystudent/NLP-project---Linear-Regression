@@ -29,7 +29,7 @@ class Data():
 
 
 	def addScoreToArray(self, score):
-		score -= 5
+		#score -= 5
 		#self.__docs_counter[score-1] += 1
 		self.__score_array.append(float(score))
 
@@ -40,25 +40,25 @@ class Data():
 		for filename in txt_files:
 			print(f'[loading: {filename}]')
 			with open(filename, 'r', encoding='utf-8') as file:
-				if int(re.findall(r'.*_(\d|\d\d)\.txt', filename)[0]) > 5:
-					self.addStringToArrays(file.read())
-					self.addScoreToArray(int(re.findall(r'.*_(\d|\d\d)\.txt', filename)[0]))
-					it += 1
+				#if int(re.findall(r'.*_(\d|\d\d)\.txt', filename)[0]) > 5:
+				self.addStringToArrays(file.read())
+				self.addScoreToArray(int(re.findall(r'.*_(\d|\d\d)\.txt', filename)[0]))
+				it += 1
 			file.close()
-			if it == 6000:
+			if it == 20000:
 				break
 		#print(self.__docs_counter)
 
 
 	def tfidf(self):
-		vectorizer = TfidfVectorizer(stop_words=self.__stop_words, min_df=0.05, max_df=0.9)
+		vectorizer = TfidfVectorizer(stop_words=self.__stop_words, min_df=0.008, max_df=0.18, ngram_range=(1,2))
 		vectors = vectorizer.fit_transform(self.__docs_array)
 		feature_names = vectorizer.get_feature_names()
 		print(f'feature names: {len(feature_names)}\n\n')
 		dense = vectors.todense()
 		denselist = dense.tolist()
 		df = pd.DataFrame(denselist, columns=feature_names)
-		df = df.assign(length = self.__docs_length)
+		#df = df.assign(length = self.__docs_length)
 		final_df = df.assign(scores = self.__score_array)
 		train_validate_test_split(final_df)
 
