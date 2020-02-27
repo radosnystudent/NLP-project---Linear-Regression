@@ -1,5 +1,5 @@
 # Linear Regression 
-Project for the Natural Language Processing classes conducted by dr Rafał Jaworski on UAM in winter term 2019/2020
+Project for the Natural Language Processing classes conducted by dr Rafał Jaworski on UAM in winter semester 2019/2020
 
 
 Project topic: Good review or bad review?
